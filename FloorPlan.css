@@ -1,0 +1,407 @@
+/* Culori ale planului. Varianta deschisă (albă) este cea implicită;
+   cea închisă se activează doar cu data-theme="dark" pe elementul rădăcină. */
+.fp {
+  --fp-card: #ffffff;
+  --fp-ground: #eef0f3;
+  --fp-floor: #fbfbfc;
+  --fp-wall: #3a4352;
+  --fp-room: #ffffff;
+  --fp-room-line: #b4bcc9;
+  --fp-room-accent: #eef1f6;
+  --fp-text: #3a4352;
+  --fp-muted: #6f7a8c;
+  --fp-window: #5aa0e6;
+  --fp-plant: #3f9a58;
+  --fp-quiet: #eef2ff;
+  --fp-quiet-line: #a9b6e8;
+  --fp-lounge: #fbe9a8;
+  --fp-lounge-line: #d9b53a;
+
+  --fp-free-fill: #e6f5ec;
+  --fp-free-line: #2b9858;
+  --fp-booked-fill: #fae2df;
+  --fp-booked-line: #cf4338;
+  --fp-selected-fill: #ff7a1a;
+  --fp-selected-line: #a94700;
+  --fp-suggested-fill: #e6efff;
+  --fp-suggested-line: #2f6feb;
+  --fp-tag-fill: #1f2630;
+  --fp-tag-text: #ffffff;
+
+  width: 100%;
+}
+
+:root[data-theme='dark'] .fp {
+  --fp-card: #171b21;
+  --fp-ground: #101318;
+  --fp-floor: #171b21;
+  --fp-wall: #aab4c4;
+  --fp-room: #1e232b;
+  --fp-room-line: #3b4452;
+  --fp-room-accent: #262c36;
+  --fp-text: #d6dce6;
+  --fp-muted: #8d97a8;
+  --fp-window: #5b9ee6;
+  --fp-plant: #52b36c;
+  --fp-quiet: #1b2236;
+  --fp-quiet-line: #4a5a8f;
+  --fp-lounge: #4a4020;
+  --fp-lounge-line: #b99a35;
+
+  --fp-free-fill: #15301f;
+  --fp-free-line: #4cc184;
+  --fp-booked-fill: #3b1b19;
+  --fp-booked-line: #ef7a70;
+  --fp-selected-fill: #ff8a33;
+  --fp-selected-line: #ffc08a;
+  --fp-suggested-fill: #17284d;
+  --fp-suggested-line: #7ea5ff;
+  --fp-tag-fill: #eef1f6;
+  --fp-tag-text: #12161c;
+}
+
+.fp-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: inherit;
+}
+
+/* Structură */
+.fp-floor {
+  fill: var(--fp-floor);
+}
+.fp-wall {
+  fill: none;
+  stroke: var(--fp-wall);
+  stroke-width: 3;
+}
+.fp-windows {
+  stroke: var(--fp-window);
+  stroke-width: 5;
+  stroke-dasharray: 18 6;
+}
+.fp-door {
+  fill: var(--fp-floor);
+  stroke: none;
+}
+.fp-entry {
+  fill: var(--fp-text);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Încăperi */
+.fp-room rect {
+  fill: var(--fp-room);
+  stroke: var(--fp-room-line);
+  stroke-width: 1.25;
+}
+.fp-room .fp-table {
+  fill: var(--fp-room-accent);
+  stroke: var(--fp-room-line);
+  stroke-width: 1;
+}
+.fp-room--lounge rect {
+  fill: var(--fp-lounge);
+  stroke: var(--fp-lounge-line);
+}
+.fp-room--collab rect {
+  stroke-dasharray: 5 4;
+}
+.fp-room-label {
+  fill: var(--fp-text);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.fp-room-label--small {
+  font-size: 9px;
+  font-weight: 500;
+  fill: var(--fp-muted);
+}
+.fp-plant circle:first-child {
+  fill: var(--fp-plant);
+  opacity: 0.35;
+}
+.fp-plant circle:last-child {
+  fill: var(--fp-plant);
+}
+
+/* Săli și cabine rezervabile */
+.fp-room--bookable {
+  cursor: pointer;
+  outline: none;
+}
+.fp-room--bookable .fp-room-body {
+  fill: var(--fp-free-fill);
+  stroke: var(--fp-free-line);
+  stroke-width: 1.75;
+  transition: fill 120ms, stroke 120ms;
+}
+.fp-room--bookable .fp-room-label--small {
+  fill: var(--fp-text);
+}
+.fp-room--booked {
+  cursor: not-allowed;
+}
+.fp-room--booked .fp-room-body {
+  fill: var(--fp-booked-fill);
+  stroke: var(--fp-booked-line);
+}
+.fp-room--selected .fp-room-body {
+  fill: var(--fp-selected-fill);
+  stroke: var(--fp-selected-line);
+  stroke-width: 2.5;
+}
+.fp-room--selected .fp-room-label {
+  fill: #1a1006;
+}
+.fp-room--selected .fp-table {
+  fill: rgba(255, 255, 255, 0.35);
+  stroke: var(--fp-selected-line);
+}
+.fp-room--suggested .fp-room-body {
+  fill: var(--fp-suggested-fill);
+  stroke: var(--fp-suggested-line);
+  stroke-width: 2.5;
+}
+@media (hover: hover) {
+  .fp-room--bookable:not(.fp-room--booked):not(.fp-room--selected):hover .fp-room-body {
+    stroke-width: 3;
+  }
+}
+.fp-room--bookable:focus-visible .fp-room-body {
+  stroke: var(--fp-text);
+  stroke-width: 3;
+}
+
+/* Locuri */
+.fp-seat {
+  cursor: pointer;
+  outline: none;
+}
+.fp-seat-body {
+  fill: var(--fp-free-fill);
+  stroke: var(--fp-free-line);
+  stroke-width: 1.5;
+  transition: fill 120ms, stroke 120ms;
+}
+.fp-seat--booked {
+  cursor: not-allowed;
+}
+.fp-seat--booked .fp-seat-body {
+  fill: var(--fp-booked-fill);
+  stroke: var(--fp-booked-line);
+}
+.fp-person {
+  fill: var(--fp-booked-line);
+  pointer-events: none;
+}
+.fp-seat--selected .fp-seat-body {
+  fill: var(--fp-selected-fill);
+  stroke: var(--fp-selected-line);
+  stroke-width: 2;
+}
+.fp-check {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.fp-seat--suggested .fp-seat-body {
+  fill: var(--fp-suggested-fill);
+  stroke: var(--fp-suggested-line);
+  stroke-width: 2;
+}
+.fp-pulse {
+  fill: none;
+  stroke: var(--fp-suggested-line);
+  stroke-width: 1.5;
+  opacity: 0.6;
+  animation: fp-pulse 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes fp-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.15;
+  }
+}
+@media (hover: hover) {
+  .fp-seat:not(.fp-seat--booked):not(.fp-seat--selected):hover .fp-seat-body {
+    stroke-width: 2.75;
+  }
+}
+.fp-seat:focus-visible .fp-seat-body {
+  stroke: var(--fp-text);
+  stroke-width: 3;
+}
+
+/* Eticheta locului selectat */
+.fp-tag rect {
+  fill: var(--fp-tag-fill);
+}
+.fp-tag text {
+  fill: var(--fp-tag-text);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fp-pulse {
+    animation: none;
+  }
+  .fp-seat-body,
+  .fp-room--bookable .fp-room-body {
+    transition: none;
+  }
+}
+
+/* Cadru: fundal alb, bară de sus, butoane plutitoare jos */
+.fp {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 460px;
+  background: var(--fp-card);
+  border: 1px solid var(--fp-room-line);
+  border-radius: 8px;
+}
+.fp-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 14px 16px 0;
+}
+.fp-top-left {
+  min-width: 0;
+  padding-top: 6px;
+}
+.fp-top-right {
+  margin-left: auto;
+}
+
+.fp-zoom {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 10px;
+}
+.fp-round {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--fp-text);
+  background: var(--fp-card);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+}
+.fp-round--text {
+  width: auto;
+  min-width: 52px;
+  padding: 0 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.fp-round[aria-pressed='true'] {
+  background: var(--fp-selected-fill);
+  color: #1a1006;
+}
+.fp-round:hover:not(:disabled):not([aria-pressed='true']) {
+  color: var(--fp-selected-line);
+}
+.fp-round:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.fp-round:focus-visible {
+  outline: 2px solid var(--fp-suggested-line);
+  outline-offset: 2px;
+}
+
+.fp-legend {
+  position: absolute;
+  right: 16px;
+  bottom: 66px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 14px;
+  list-style: none;
+  font-size: 13px;
+  color: var(--fp-text);
+  background: var(--fp-card);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+.fp-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fp-sw {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid;
+  border-radius: 4px;
+}
+.fp-sw--free { background: var(--fp-free-fill); border-color: var(--fp-free-line); }
+.fp-sw--booked { background: var(--fp-booked-fill); border-color: var(--fp-booked-line); }
+.fp-sw--selected { background: var(--fp-selected-fill); border-color: var(--fp-selected-line); }
+.fp-sw--suggested { background: var(--fp-suggested-fill); border-color: var(--fp-suggested-line); }
+.fp-sw--window { width: 18px; height: 0; border: 0; border-top: 4px dashed var(--fp-window); border-radius: 0; background: none; }
+
+.fp-scroll {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  padding: 8px 16px 72px;
+}
+.fp-stage {
+  flex: 0 0 auto;
+  margin: auto;
+  transition: width 150ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fp-stage {
+    transition: none;
+  }
+}
+
+/* Zona liniștită */
+.fp-quiet {
+  fill: var(--fp-quiet);
+  stroke: var(--fp-quiet-line);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.fp-quiet-label {
+  fill: var(--fp-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
